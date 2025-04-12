@@ -30,7 +30,7 @@ async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
         .on_async("/", fe)
         .on_async("/sub", sub)
         .on("/link", link)
-        .on_async("/:proxyip", tunnel)
+        .on_async("/free/aot/:proxyip", tunnel)
         .run(req, env)
         .await
 }
@@ -119,23 +119,23 @@ fn link(_: Request, cx: RouteContext<Config>) -> Result<Response> {
             "ps": "siren vmess",
             "v": "2",
             "add": host,
-            "port": "80",
+            "port": "443",
             "id": uuid,
             "aid": "0",
             "scy": "zero",
             "net": "ws",
             "type": "none",
             "host": host,
-            "path": "/KR",
-            "tls": "",
-            "sni": "",
+            "path": "/free/aot/SG",
+            "tls": "tls",
+            "sni": host,
             "alpn": ""}
         );
         format!("vmess://{}", URL_SAFE.encode(config.to_string()))
     };
-    let vless_link = format!("vless://{uuid}@{host}:443?encryption=none&type=ws&host={host}&path=%2FKR&security=tls&sni={host}#siren vless");
-    let trojan_link = format!("trojan://{uuid}@{host}:443?encryption=none&type=ws&host={host}&path=%2FKR&security=tls&sni={host}#siren trojan");
-    let ss_link = format!("ss://{}@{host}:443?plugin=v2ray-plugin%3Btls%3Bmux%3D0%3Bmode%3Dwebsocket%3Bpath%3D%2FKR%3Bhost%3D{host}#siren ss", URL_SAFE.encode(format!("none:{uuid}")));
+    let vless_link = format!("vless://{uuid}@{host}:443?encryption=none&type=ws&host={host}&path=%2Ffree%2Faot%2FSG&security=tls&sni={host}#siren vless");
+    let trojan_link = format!("trojan://{uuid}@{host}:443?encryption=none&type=ws&host={host}&path=%2Ffree%2Faot%2FSG&security=tls&sni={host}#siren trojan");
+    let ss_link = format!("ss://{}@{host}:443?plugin=v2ray-plugin%3Btls%3Bmux%3D0%3Bmode%3Dwebsocket%3Bpath%3D%2Ffree%2Faot%2FSG%3Bhost%3D{host}#siren ss", URL_SAFE.encode(format!("none:{uuid}")));
     
     Response::from_body(ResponseBody::Body(format!("{vmess_link}\n{vless_link}\n{trojan_link}\n{ss_link}").into()))
 }
